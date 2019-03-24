@@ -1,0 +1,3 @@
+# Internet of Things project
+This is an embedded system project that currently uses atmega32 as the platform from which we will connect to the internet to push data using esp8266-01 ...
+This is just a beginning and through days this read me will be updated this is just for initial commit .
