@@ -26,34 +26,12 @@
 
 
 extern DataStruct_t TempData,LightData ;
+extern volatile u8 Pending_Data_F ;
 extern void T_Display(void *pvData);
 extern void T_DataInputs(void *pvData);
 
 
 void T_SysComm(void *pvData){
-
-	// Initialize LCD
-	LCD_Init();
-	LCD_Clear_Display();
-
-	//Initialize UART Baud 9600
-	usart_init(9600);
-	usart_puts("UART READY\r\n");
-
-	// Initialize ADC Related Sensors
-	InitLDR();
-	InitTemperature();
-	ADC_Init();
-
-	// Initialize Globals
-	// Temperature Data Type
-	TempData.Type = DT_TEMP;
-	TempData.CurrentValue  = 0;
-	TempData.PreviousValue = 0;
-	// Light Intensity Data Type
-	LightData.Type = DT_LIGHT ;
-	LightData.CurrentValue = 0;
-	LightData.PreviousValue= 0;
 
 	// Create Tasks
 	xTaskCreate(T_Display,NULL,200,NULL,1,NULL);
@@ -63,8 +41,8 @@ void T_SysComm(void *pvData){
 
 	while(1){
 
-		// implement all System Communication related code
-		// to be implemented yet
+		// event based on received data from queue RX.
+		// event based on transmitted data over queue TX.
 
 		vTaskDelay(2);
 	}

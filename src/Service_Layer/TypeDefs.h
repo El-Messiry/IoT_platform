@@ -45,6 +45,7 @@ typedef signed long   s32;
 
 #define DT_TEMP 			1
 #define DT_LIGHT			2
+
 typedef struct {
 	u8  Type;
 	u16 CurrentValue;
