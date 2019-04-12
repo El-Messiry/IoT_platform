@@ -22,6 +22,8 @@
 #include "../MHAL/Temperature.h"
 
 extern DataStruct_t TempData,LightData ;
+extern volatile u8 Pending_Data_F ;
+
 
 
 
@@ -34,6 +36,26 @@ void T_DataInputs(void *pvData){
 		TempData.CurrentValue = GetTemperature();
 		LightData.CurrentValue= GetLDR();
 
-		vTaskDelay(500);
+
+		// take Mutex
+		xSemaphoreTake( Mutex_Data, 1000 ); // Time out of 1 sec
+		{
+			/* The following lines will only execute once the mutex has been
+			successfully obtained. */
+
+			// see if data changed from previous reading
+			if(TempData.CurrentValue != TempData.PreviousValue )
+				Pending_Data_F = TRUE;
+			else if(LightData.CurrentValue != LightData.PreviousValue)
+				Pending_Data_F = TRUE;
+			else
+				Pending_Data_F = FALSE; // Data remained unchanged , do nothing
+
+		}
+		xSemaphoreGive( Mutex_Data );
+		// Release Mutex
+
+		vTaskDelay(1000); 	// Suspend Task for 1 Sec
 	}
 }
+

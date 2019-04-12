@@ -1,5 +1,8 @@
+
 #include <avr/io.h>
+#include <avr/interrupt.h>
 #include "usart_driver.h"
+
 
 void usart_init(unsigned  int baudrate)
 {
@@ -14,6 +17,9 @@ void usart_init(unsigned  int baudrate)
 	//Enable Transmitter and Receiver
 	UCSRB=(1<<RXEN)|(1<<TXEN);
 }
+
+
+#if (UART_SYS == POLLING) //cad rc
 unsigned char usart_getc( void )
 {
 	/* Wait for data to be received */
@@ -50,3 +56,26 @@ void usart_gets( char* str )
 	}
 
 }
+#else if UART_SYS == INTERRUPT
+
+
+
+
+
+// RX Interrupt Handler
+ISR(USART_RXC_vect){
+	u8 byte = UDR;	// receive byte
+	xQueueSendToBackFromISR(Q_Uart_RX,&byte,0);	// send received byte to T_SysComm
+}
+
+
+// TX Interrupt Handler
+ISR(USART_TXC_vect){
+	u8 byte ;	// byte holder to receive byte coming from queue
+	// implement how to handle the queue data ....
+		UDR=byte; // load byte to UDR and transmit
+	}
+}
+
+
+#endif
