@@ -9,8 +9,8 @@ RM := rm -rf
 # All of the sources participating in the build are defined here
 -include sources.mk
 -include src/Service_Layer/FreeRTOS/Src/subdir.mk
--include src/MHAL/subdir.mk
 -include src/MCAL/subdir.mk
+-include src/HAL/subdir.mk
 -include src/APP/subdir.mk
 -include subdir.mk
 -include objects.mk

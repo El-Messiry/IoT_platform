@@ -1,5 +1,5 @@
-src/APP/T_Display.o src/APP/T_Display.o: ../src/APP/T_Display.c \
-  ../src/APP/T_Display.h ../src/APP/../Service_Layer/TypeDefs.h \
+src/APP/T_Execute.o src/APP/T_Execute.o: ../src/APP/T_Execute.c \
+  ../src/APP/T_Execute.h ../src/APP/../Service_Layer/TypeDefs.h \
   D:\eclipse_workbench\MY_RTOS_PROJ_V4\src\Service_Layer\FreeRTOS\Inc/FreeRTOS.h \
   D:\eclipse_workbench\MY_RTOS_PROJ_V4\src\Service_Layer\FreeRTOS/FreeRTOSConfig.h \
   D:\eclipse_workbench\MY_RTOS_PROJ_V4\src\Service_Layer\FreeRTOS\Inc/projdefs.h \
@@ -13,10 +13,9 @@ src/APP/T_Display.o src/APP/T_Display.o: ../src/APP/T_Display.c \
   D:\eclipse_workbench\MY_RTOS_PROJ_V4\src\Service_Layer\FreeRTOS\Inc/queue.h \
   D:\eclipse_workbench\MY_RTOS_PROJ_V4\src\Service_Layer\FreeRTOS\Inc/event_groups.h \
   D:\eclipse_workbench\MY_RTOS_PROJ_V4\src\Service_Layer\FreeRTOS\Inc/timers.h \
-  D:\eclipse_workbench\MY_RTOS_PROJ_V4\src\Service_Layer\FreeRTOS\Inc/task.h \
-  ../src/APP/../HAL/LCD.h
+  D:\eclipse_workbench\MY_RTOS_PROJ_V4\src\Service_Layer\FreeRTOS\Inc/task.h
 
-../src/APP/T_Display.h:
+../src/APP/T_Execute.h:
 
 ../src/APP/../Service_Layer/TypeDefs.h:
 
@@ -47,5 +46,3 @@ D:\eclipse_workbench\MY_RTOS_PROJ_V4\src\Service_Layer\FreeRTOS\Inc/event_groups
 D:\eclipse_workbench\MY_RTOS_PROJ_V4\src\Service_Layer\FreeRTOS\Inc/timers.h:
 
 D:\eclipse_workbench\MY_RTOS_PROJ_V4\src\Service_Layer\FreeRTOS\Inc/task.h:
-
-../src/APP/../HAL/LCD.h:

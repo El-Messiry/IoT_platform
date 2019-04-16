@@ -22,7 +22,7 @@ C_DEPS :=
 # Every subdirectory with source files must be described here
 SUBDIRS := \
 src/APP \
+src/HAL \
 src/MCAL \
-src/MHAL \
 src/Service_Layer/FreeRTOS/Src \
 

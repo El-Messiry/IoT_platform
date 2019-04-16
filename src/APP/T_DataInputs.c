@@ -14,12 +14,12 @@
 #include "semphr.h"
 #include "event_groups.h"
 
-// This should be removed as app layer should only call "MHAL"
-// reblace uart send with "ESP driver or Communication Layer in HAL that uses "ESP"
-#include "../MCAL/usart_driver.h"
+#include "../HAL/LDR.h"
+#include "../HAL/Temperature.h"
 
-#include "../MHAL/LDR.h"
-#include "../MHAL/Temperature.h"
+
+
+extern xSemaphoreHandle Mutex_Data ;			// Mutex handle Data Resources
 
 extern DataStruct_t TempData,LightData ;
 extern volatile u8 Pending_Data_F ;

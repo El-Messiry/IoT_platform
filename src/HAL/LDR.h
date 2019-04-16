@@ -5,8 +5,8 @@
  *      Author: messi
  */
 
-#ifndef MHAL_LDR_H_
-#define MHAL_LDR_H_
+#ifndef HAL_LDR_H_
+#define HAL_LDR_H_
 
 #include "../Service_Layer/TypeDefs.h"
 
@@ -20,4 +20,4 @@ u8 InitLDR(void);
 u16 GetLDR(void);
 
 
-#endif /* MHAL_LDR_H_ */
+#endif /* HAL_LDR_H_ */

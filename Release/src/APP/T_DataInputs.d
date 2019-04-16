@@ -14,9 +14,8 @@ src/APP/T_DataInputs.o src/APP/T_DataInputs.o: ../src/APP/T_DataInputs.c \
   D:\eclipse_workbench\MY_RTOS_PROJ_V4\src\Service_Layer\FreeRTOS\Inc/event_groups.h \
   D:\eclipse_workbench\MY_RTOS_PROJ_V4\src\Service_Layer\FreeRTOS\Inc/timers.h \
   D:\eclipse_workbench\MY_RTOS_PROJ_V4\src\Service_Layer\FreeRTOS\Inc/task.h \
-  ../src/APP/../MCAL/usart_driver.h ../src/APP/../MHAL/LDR.h \
-  ../src/APP/../MHAL/../Service_Layer/TypeDefs.h \
-  ../src/APP/../MHAL/Temperature.h
+  ../src/APP/../HAL/LDR.h ../src/APP/../HAL/../Service_Layer/TypeDefs.h \
+  ../src/APP/../HAL/Temperature.h
 
 ../src/APP/T_DataInputs.h:
 
@@ -50,10 +49,8 @@ D:\eclipse_workbench\MY_RTOS_PROJ_V4\src\Service_Layer\FreeRTOS\Inc/timers.h:
 
 D:\eclipse_workbench\MY_RTOS_PROJ_V4\src\Service_Layer\FreeRTOS\Inc/task.h:
 
-../src/APP/../MCAL/usart_driver.h:
+../src/APP/../HAL/LDR.h:
 
-../src/APP/../MHAL/LDR.h:
+../src/APP/../HAL/../Service_Layer/TypeDefs.h:
 
-../src/APP/../MHAL/../Service_Layer/TypeDefs.h:
-
-../src/APP/../MHAL/Temperature.h:
+../src/APP/../HAL/Temperature.h:
