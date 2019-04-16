@@ -44,6 +44,12 @@ typedef signed long   s32;
 #define NO_TIMEOUT 0
 
 
+#define TIMEOUT_10ms	10
+#define TIMEOUT_50ms	50
+#define TIMEOUT_100ms	100
+#define TIMEOUT_200ms	200
+
+
 #define DT_TEMP 			1
 #define DT_LIGHT			2
 

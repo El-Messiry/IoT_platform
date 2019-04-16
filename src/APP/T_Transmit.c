@@ -34,7 +34,6 @@ void T_Transmit(void *pvData){
 	while(1){
 
 
-		// Block on Q_uart_TX ...
 
 
 

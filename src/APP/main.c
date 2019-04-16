@@ -40,6 +40,7 @@ volatile u8 Pending_Data_F ;			// Pending_Data_F flag to be used by T_SysComm
 /* Declaration of Queues services */
 xQueueHandle Q_Uart_RX ;				// 1) queue used between RX ISR
 xQueueHandle Q_Uart_TX ;				// 2) queue used between TX ISR
+xQueueHandle Q_Order ;					// 3) queue used to hold Orders to be Execute
 
 
 void sys_init(void){
@@ -89,9 +90,10 @@ int main (void){
 	/* Create Queues Needed */
 	Q_Uart_RX = xQueueCreate(20,sizeof(char));	// UART RX queue create ,used by ISR
 	Q_Uart_TX = xQueueCreate(20,sizeof(char));	// UART TX queue create ,used by T_Transmit
+	Q_Order   = xQueueCreate(5,sizeof(DataStruct_t)); // Order Queue , up to 5 Orders
 
 	/* Initialize System I/O Resources */
-	sys_init();
+	//sys_init();
 
 	/* Create Entry Initialization Task  */
 	xTaskCreate(T_Receive,NULL,400,NULL,5,NULL);		// Create Task Receive

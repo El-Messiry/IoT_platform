@@ -4,22 +4,22 @@
 
 # Add inputs and outputs from these tool invocations to the build variables 
 C_SRCS += \
-../src/HAL/ESP8266.c \
 ../src/HAL/LCD.c \
 ../src/HAL/LDR.c \
-../src/HAL/Temperature.c 
+../src/HAL/Temperature.c \
+../src/HAL/Wifi_ESP8266.c 
 
 OBJS += \
-./src/HAL/ESP8266.o \
 ./src/HAL/LCD.o \
 ./src/HAL/LDR.o \
-./src/HAL/Temperature.o 
+./src/HAL/Temperature.o \
+./src/HAL/Wifi_ESP8266.o 
 
 C_DEPS += \
-./src/HAL/ESP8266.d \
 ./src/HAL/LCD.d \
 ./src/HAL/LDR.d \
-./src/HAL/Temperature.d 
+./src/HAL/Temperature.d \
+./src/HAL/Wifi_ESP8266.d 
 
 
 # Each subdirectory must supply rules for building sources it contributes

@@ -46,10 +46,6 @@ void Wifi_Send(DataStruct_t *pvdata){
 	 *
 	 */
 
-
-	char *str="wifi send : 0";
-
-
 	/*
 	 * Transmit Sequence:
 	 *
@@ -60,6 +56,7 @@ void Wifi_Send(DataStruct_t *pvdata){
 	 *    to the string holding the Complete URL and push it to the queue
 	 */
 
+	char *str="wifi send : 0"; // str should point to the final URL
 	u8 index=0;
 	while( str[index] ){						// while str[index] != '\0'
 		xQueueSend(Q_Uart_TX,&str[index],0);	// send char to Queue
