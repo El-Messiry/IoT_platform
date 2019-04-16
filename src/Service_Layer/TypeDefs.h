@@ -41,6 +41,7 @@ typedef signed long   s32;
 
 #define TRUE   1
 #define FALSE  0
+#define NO_TIMEOUT 0
 
 
 #define DT_TEMP 			1

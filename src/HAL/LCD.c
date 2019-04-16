@@ -4,7 +4,7 @@
  *  Created on: Sep 1, 2016
  *      Author: ahmed
  */
-#include "LCD.h"
+#include "../HAL/LCD.h"
 
 /*LCD initialization & clearing*/
 void LCD_Init(void)

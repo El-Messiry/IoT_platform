@@ -13,6 +13,10 @@
 #include "queue.h"
 #include "semphr.h"
 #include "event_groups.h"
+
+#include "../HAL/LCD.h"
+#include "../HAL/LDR.h"
+#include "../HAL/Temperature.h"
 #include "../Service_Layer/TypeDefs.h"
 
 /* Micro Controller Abstract Layers Includes  */
@@ -20,16 +24,13 @@
 #include "../MCAL/usart_driver.h"
 
 /* Hardware Abstract Layer Includes */
-#include "../MHAL/LCD.h"
-#include "../MHAL/LDR.h"
-#include "../MHAL/Temperature.h"
-
-
-#include "T_SysComm.h"
+#include "T_Receive.h"
 
 /* Declaration of OS Services */
-//declare Mutex semaphore for Data Handling Resources
-xSemaphoreHandle Mutex_Data ;
+/* Declare Mutex semaphore for Data Handling Resources */
+xSemaphoreHandle Mutex_Data ;			// Mutex handle Data Resources
+xSemaphoreHandle BS_RXC_Interrupt;		// BinarySemaphore signal RX interrupt
+xSemaphoreHandle BS_TXC_Interrupt;		// BinarySemaphore signal TX interrupt
 
 /* Declaration of Global Resources  */
 volatile DataStruct_t TempData ;		// store data related to Temperature
@@ -37,41 +38,32 @@ volatile DataStruct_t LightData ;		// store data related to Light Intensity
 volatile u8 Pending_Data_F ;			// Pending_Data_F flag to be used by T_SysComm
 
 /* Declaration of Queues services */
-xQueueHandle Q_Uart_RX ;				// 1) queue used between RX ISR & T_SysComm
-xQueueHandle Q_Uart_TX ;				// 2) queue used between TX ISR & T_SysComm
+xQueueHandle Q_Uart_RX ;				// 1) queue used between RX ISR
+xQueueHandle Q_Uart_TX ;				// 2) queue used between TX ISR
 
-
-int main (void){
-
-	/* Create Required Mutexs */
-	Mutex_Data = xSemaphoreCreateMutex();
-
-	/* Create Queues Needed */
-	Q_Uart_RX = xQueueCreate(20,sizeof(char));	// UART RX queue created and used by ISR
-	Q_Uart_RX = xQueueCreate(20,sizeof(char));	// UART TX queue created and used by ISR
-
-	/* Create Entry Initialization Task  */
-	xTaskCreate(T_SysComm,NULL,400,NULL,5,NULL);
-
-	/* Start OS/Scheduler */
-	vTaskStartScheduler();
-
-	return 0;
-}
 
 void sys_init(void){
+	/*
+	 * Description :
+	 *
+	 * Used to Initialize All MCu Peripherals
+	 * 1- LCD init
+	 * 2- Wifi init
+	 * 3- Light Module init
+	 * 4- Temperature Module init
+	 * 5- Initialize Values of TEMP & LIGHT Data Variables
+	 *
+	 */
 	// Initialize LCD
 	LCD_Init();
 	LCD_Clear_Display();
 
-	//Initialize UART Baud 9600
-	usart_init(9600);
-	//usart_puts("UART READY\r\n");
+	// Initialize Wifi Module ESP8266 .
+	Init_Wifi();
 
-	// Initialize ADC Related Sensors
+	// Initialize Sensors
 	InitLDR();
 	InitTemperature();
-
 
 	// Initialize Globals
 	// Temperature Data Type
@@ -82,7 +74,34 @@ void sys_init(void){
 	LightData.Type = DT_LIGHT ;
 	LightData.CurrentValue = 0;
 	LightData.PreviousValue= 0;
+
+
+
 }
+
+int main (void){
+
+	/* Create Required Mutexs */
+	Mutex_Data = xSemaphoreCreateMutex();				// Create Data Mutex
+	vSemaphoreCreateBinary(BS_RXC_Interrupt,FALSE);		// Create RX Binary Semaphore
+	vSemaphoreCreateBinary(BS_TXC_Interrupt,FALSE);		// Create TX Binary Semaphore
+
+	/* Create Queues Needed */
+	Q_Uart_RX = xQueueCreate(20,sizeof(char));	// UART RX queue create ,used by ISR
+	Q_Uart_TX = xQueueCreate(20,sizeof(char));	// UART TX queue create ,used by T_Transmit
+
+	/* Initialize System I/O Resources */
+	sys_init();
+
+	/* Create Entry Initialization Task  */
+	xTaskCreate(T_Receive,NULL,400,NULL,5,NULL);		// Create Task Receive
+
+	/* Start OS/Scheduler */
+	vTaskStartScheduler();
+
+	return 0;
+}
+
 
 
 

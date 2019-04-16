@@ -15,7 +15,7 @@
 #include "semphr.h"
 #include "event_groups.h"
 
-#include "../MHAL/LCD.h"
+#include "../HAL/LCD.h"
 
 extern DataStruct_t TempData,LightData ;
 

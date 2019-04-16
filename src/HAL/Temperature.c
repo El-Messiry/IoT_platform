@@ -6,7 +6,8 @@
  */
 
 
-#include "Temperature.h"
+#include "../HAL/Temperature.h"
+
 #include "../MCAL/ADC.h"
 #include "../MCAL/DIO.h"
 #include <avr/io.h>

@@ -6,19 +6,25 @@
 C_SRCS += \
 ../src/APP/T_DataInputs.c \
 ../src/APP/T_Display.c \
-../src/APP/T_SysComm.c \
+../src/APP/T_Receive.c \
+../src/APP/T_TX_Handler.c \
+../src/APP/T_Transmit.c \
 ../src/APP/main.c 
 
 OBJS += \
 ./src/APP/T_DataInputs.o \
 ./src/APP/T_Display.o \
-./src/APP/T_SysComm.o \
+./src/APP/T_Receive.o \
+./src/APP/T_TX_Handler.o \
+./src/APP/T_Transmit.o \
 ./src/APP/main.o 
 
 C_DEPS += \
 ./src/APP/T_DataInputs.d \
 ./src/APP/T_Display.d \
-./src/APP/T_SysComm.d \
+./src/APP/T_Receive.d \
+./src/APP/T_TX_Handler.d \
+./src/APP/T_Transmit.d \
 ./src/APP/main.d 
 
 

@@ -12,7 +12,7 @@
 // INTERRUPT or POLLING
 #define INTERRUPT 	0
 #define POLLING 	1
-#define UART_SYS 	INTERRUPT	// UART System
+#define UART_MODE 	INTERRUPT	// UART System
 
 
 

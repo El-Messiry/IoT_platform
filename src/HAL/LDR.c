@@ -7,7 +7,8 @@
 
 
 
-#include "LDR.h"
+#include "../HAL/LDR.h"
+
 #include "../MCAL/ADC.h"
 #include "../MCAL/DIO.h"
 

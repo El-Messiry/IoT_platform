@@ -2,7 +2,17 @@
 #include <avr/io.h>
 #include <avr/interrupt.h>
 #include "usart_driver.h"
+#include "FreeRTOS.h"
+#include "task.h"
+#include "queue.h"
+#include "semphr.h"
+#include "event_groups.h"
 
+
+extern xQueueHandle Q_Uart_RX ;				// 1) queue used between RX ISR
+extern xQueueHandle Q_Uart_TX ;				// 2) queue used between TX ISR
+extern xSemaphoreHandle BS_RXC_Interrupt;	// BinarySemaphore signal RX interrupt
+extern xSemaphoreHandle BS_TXC_Interrupt;	// BinarySemaphore signal TX interrupt
 
 void usart_init(unsigned  int baudrate)
 {
@@ -56,26 +66,47 @@ void usart_gets( char* str )
 	}
 
 }
-#else if UART_SYS == INTERRUPT
-
-
-
-
+#else if UART_MODE == INTERRUPT
 
 // RX Interrupt Handler
 ISR(USART_RXC_vect){
-	u8 byte = UDR;	// receive byte
-	xQueueSendToBackFromISR(Q_Uart_RX,&byte,0);	// send received byte to T_SysComm
-}
+	u8 byte ;
+	byte = UDR;		// receive byte
+	xQueueSendToBackFromISR(Q_Uart_RX,&byte,NO_TIMEOUT);	// send received byte to Q_Uart_RX
 
+	if(byte == '\0'){	// if Byte received was '\0' indicating End of String
+		xSemaphoreGiveFromISR(BS_RXC_Interrupt,FALSE);	// Give (BS_RXC_Interrupt) Signal
+	}
+}
 
 // TX Interrupt Handler
 ISR(USART_TXC_vect){
-	u8 byte ;	// byte holder to receive byte coming from queue
-	// implement how to handle the queue data ....
-		UDR=byte; // load byte to UDR and transmit
-	}
+	xSemaphoreGiveFromISR(BS_TXC_Interrupt,FALSE);			// Give (BS_TXC_Interrupt) Signal
 }
+
+
+// The following should be implemented in HAL .... REMOVE IT
+
+//void usart_puts( char* str )
+//{
+//	u8 data;
+//	if( uxQueueMessagesWaiting(Q_Uart_TX) != FALSE){	// if Queue not empty
+//
+//		xSemaphoreGiveFromISR(BS_TXC_Interrupt,FALSE);	// Enable the Send of First Byte
+//		xQueueReceive(Q_Uart_TX,&data,NO_TIMEOUT);	// Receive First Byte
+//		usart_putc(data);					// Send First Byte
+//
+//		while(uxQueueMessagesWaiting(Q_Uart_TX)!= FALSE){
+//			// Process Queue Data while not empty
+//			xQueueReceive(Q_Uart_TX,&data,0);	// Receive Byte
+//			usart_putc(data);					// Send Byte
+//		}
+//
+//	}
+//
+//	return;
+//}
+
 
 
 #endif
