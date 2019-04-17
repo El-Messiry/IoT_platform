@@ -1,0 +1,17 @@
+#ignore all .map files
+*.map
+
+#ignore all .hex files
+*.hex
+
+#ignore all .lss files
+*.lss
+
+#ignore all .eep files
+*.eep
+
+#ignore all .mk files
+*.mk
+
+#ignore all .elf files
+*.elf

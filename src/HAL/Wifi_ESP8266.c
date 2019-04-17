@@ -161,7 +161,6 @@ u8 Init_Wifi(void){
 	}
 
 
-
 	/*
 	 * ESP8266 Driver still to be implemented
 	 */
