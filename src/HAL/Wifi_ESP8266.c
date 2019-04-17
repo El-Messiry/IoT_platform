@@ -16,6 +16,27 @@ extern xSemaphoreHandle BS_RXC_Interrupt;	// BinarySemaphore signal RX interrupt
 extern xSemaphoreHandle BS_TXC_Interrupt;	// BinarySemaphore signal TX interrupt
 
 
+
+
+static void TX_Send(char *str){
+	/*
+	 * Description:
+	 * Send String str Through Uart
+	 */
+	u8 index=0;
+	while( str[index] ){						// while str[index] != '\0'
+		xQueueSend(Q_Uart_TX,&str[index],0);	// send char to Queue
+		index++;								// increment index
+	}
+	xQueueSend(Q_Uart_TX,&str[index],0);	// send '\0' (End of String) to Queue
+	xSemaphoreGive(BS_TXC_Interrupt);		// Signal the First Byte to Transmit
+	/*
+	 * T_TX_Handler will run transmitting First Byte
+	 * after successful transmission of First Byte
+	 * TXC ISR will signal to transmit remaining Bytes
+	 */
+}
+
 void Init_Wifi(void){
 	//Initialize UART Baud 9600
 	usart_init(9600);
@@ -41,9 +62,7 @@ void Init_Wifi(void){
 void Wifi_Send(DataStruct_t *pvdata){
 	/*
 	 * Description:
-	 *
 	 * Used to Send the Data Through Wifi Module
-	 *
 	 */
 
 	/*
@@ -57,20 +76,8 @@ void Wifi_Send(DataStruct_t *pvdata){
 	 */
 
 	char *str="wifi send : 0"; // str should point to the final URL
-	u8 index=0;
-	while( str[index] ){						// while str[index] != '\0'
-		xQueueSend(Q_Uart_TX,&str[index],0);	// send char to Queue
-		index++;								// increment index
-	}
-	xQueueSend(Q_Uart_TX,&str[index],0);	// send '\0' (End of String) to Queue
-	xSemaphoreGive(BS_TXC_Interrupt);		// Signal the First Byte to Transmit
-	/*
-	 * T_TX_Handler will run transmitting First Byte
-	 * after successful transmission of First Byte
-	 * TXC ISR will signal to transmit remaining Bytes
-	 */
 
-
+	TX_Send(str);
 
 	/*
 	 * ESP8266 Driver still to be implemented

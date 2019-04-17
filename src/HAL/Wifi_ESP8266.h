@@ -10,10 +10,11 @@
 
 #include "../Service_Layer/TypeDefs.h"
 
+#define WIFI_CHECK ""
 
 void Init_Wifi(void);
 void Wifi_Send(DataStruct_t *pvdata);
 DataStruct_t * Wifi_Receive(void);
-
+static void Load_TX_Q(char *str);
 
 #endif /* HAL_WIFI_ESP8266_H_ */

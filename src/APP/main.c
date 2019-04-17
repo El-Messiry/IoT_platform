@@ -38,8 +38,8 @@ volatile DataStruct_t LightData ;		// store data related to Light Intensity
 volatile u8 Pending_Data_F ;			// Pending_Data_F flag to be used by T_SysComm
 
 /* Declaration of Queues services */
-xQueueHandle Q_Uart_RX ;				// 1) queue used between RX ISR
-xQueueHandle Q_Uart_TX ;				// 2) queue used between TX ISR
+xQueueHandle Q_Uart_RX ;				// 1) queue used for RX ISR
+xQueueHandle Q_Uart_TX ;				// 2) queue used for TX ISR
 xQueueHandle Q_Order ;					// 3) queue used to hold Orders to be Execute
 
 
@@ -55,18 +55,18 @@ void sys_init(void){
 	 * 5- Initialize Values of TEMP & LIGHT Data Variables
 	 *
 	 */
-	// Initialize LCD
+	// Initializing LCD
 	LCD_Init();
 	LCD_Clear_Display();
 
-	// Initialize Wifi Module ESP8266 .
+	// Initializing Wifi Module ESP8266 .
 	Init_Wifi();
 
-	// Initialize Sensors
+	// Initializing Sensors
 	InitLDR();
 	InitTemperature();
 
-	// Initialize Globals
+	// Initializing Globals
 	// Temperature Data Type
 	TempData.Type = DT_TEMP;
 	TempData.CurrentValue  = 0;
@@ -75,8 +75,6 @@ void sys_init(void){
 	LightData.Type = DT_LIGHT ;
 	LightData.CurrentValue = 0;
 	LightData.PreviousValue= 0;
-
-
 
 }
 
