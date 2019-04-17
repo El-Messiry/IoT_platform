@@ -31,10 +31,7 @@ void T_Execute(void *pvData){
 		if(status == pdPASS){
 			// Execute order
 		}
-		else{
-			// queue reception failed .. order queue empty
-		}
-		vTaskDelay(TIMEOUT_100ms);
+		vTaskDelay(TIMEOUT_100ms); //Sleep for 100ms
 	}
 
 

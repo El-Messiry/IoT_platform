@@ -10,18 +10,17 @@
 
 #include "../MCAL/usart_driver.h"
 
-extern xQueueHandle Q_Uart_RX ;				// 1) queue used between RX ISR
-extern xQueueHandle Q_Uart_TX ;				// 2) queue used between TX ISR
+extern xQueueHandle Q_Uart_RX ;				// 1) queue used For RX Buffer
+extern xQueueHandle Q_Uart_TX ;				// 2) queue used For TX Buffer
 extern xSemaphoreHandle BS_RXC_Interrupt;	// BinarySemaphore signal RX interrupt
 extern xSemaphoreHandle BS_TXC_Interrupt;	// BinarySemaphore signal TX interrupt
 
 
-
-
-static void TX_Send(char *str){
+static void Put_TX_Q(char *str){
 	/*
 	 * Description:
-	 * Send String str Through Uart
+	 * Load String Bytes to Queue (Q_Uart_TX)
+	 * to be sent By UART
 	 */
 	u8 index=0;
 	while( str[index] ){						// while str[index] != '\0'
@@ -31,35 +30,60 @@ static void TX_Send(char *str){
 	xQueueSend(Q_Uart_TX,&str[index],0);	// send '\0' (End of String) to Queue
 	xSemaphoreGive(BS_TXC_Interrupt);		// Signal the First Byte to Transmit
 	/*
-	 * T_TX_Handler will run transmitting First Byte
-	 * after successful transmission of First Byte
-	 * TXC ISR will signal to transmit remaining Bytes
+	 * Task T_TX_Handler is Locked on Semaphore (BS_TXC_Interrupt)
+	 * so Task will run transmitting First Byte
+	 * after successful transmission of First Byte, TXC ISR
+	 * will signalSemaphore (BS_TXC_Interrupt) to transmit remaining Bytes
 	 */
 }
 
-void Init_Wifi(void){
-	//Initialize UART Baud 9600
-	usart_init(9600);
-
-
+static void Get_RX_Q(char *str,u8 TimeOut){
 	/*
-	 * 1) Connect to available wifi nearby
-	 * 2) after successful Connection, Connect to the MQTT server
-	 * 3) check for successful Connection
-	 * 4) connection failure should be handles properly by trying 3 times
-	 * 5) incase of connection failure a message should be displayed
+	 * Description:
+	 * Get String Bytes from Queue (Q_Uart_RX)
+	 * to be Decoded into Information, it returns
+	 * if End of String operator reached
+	 * NOTE: EOF '\0' could happen after
+	 * carriage return & new line '\r\n' , but Wifi Module
+	 * can send those between actual messages
+	 * so it should be handled to discard those inter-messages
+	 * carriage return and new line
+	 */
+	u8 byte,index=0;
+	while(uxQueueMessagesWaiting(Q_Uart_RX)!=0){
+		// Process Queue Data while not empty
+		if(xQueueReceive(Q_Uart_RX,&byte,TIMEOUT_200ms)){	// receive byte
+			str[index]=byte;		// copy byte into str
+			index++;				// increment index
+			if(byte == '\0'){		// if End of String Reached
+				str[index] = '\0' ;	// put '\0' into str
+				return ;			// return
+			}
+		}
+	}
+}
+
+static u8 Check_Response(char *Expected_str , char *Given_str){
+	/*
+	 * Description:
+	 * 		Checks if the response is the expected or not
+	 * Return:
+	 * 		(TRUE) if response is a match
+	 * 		(FALSE) if response is a no match
 	 */
 
-	/*
-	 * ESP8266 Driver still to be implemented
-	 */
+	u8 index_expected=0,index_given=0,Match_F=FALSE;
 
-	return;
+
+	// implement function body
+
+
+	return Match_F;
 
 }
 
 
-void Wifi_Send(DataStruct_t *pvdata){
+void Wifi_Send(DataStruct_t *pStructData){
 	/*
 	 * Description:
 	 * Used to Send the Data Through Wifi Module
@@ -75,6 +99,9 @@ void Wifi_Send(DataStruct_t *pvdata){
 	 *    to the string holding the Complete URL and push it to the queue
 	 */
 
+
+	//char *str = Encode_MQTT(*pStructData) ;
+
 	char *str="wifi send : 0"; // str should point to the final URL
 
 	TX_Send(str);
@@ -86,18 +113,59 @@ void Wifi_Send(DataStruct_t *pvdata){
 }
 
 
-DataStruct_t * Wifi_Receive(void){
+DataStruct_t Wifi_Receive(void){
 	/*
 	 * Description:
 	 *
 	 * Used to Receive the Incoming Data from Wifi Module
 	 *
 	 */
-	DataStruct_t * data;
+	DataStruct_t data;
 
+
+	//
 
 	/*
 	 * ESP8266 Driver still to be implemented
 	 */
 	return data;
+}
+
+u8 Init_Wifi(void){
+	//Initialize UART Baud 9600
+	usart_init(9600);
+	// make enable TX&RX function
+	// flush the receive buffer Q_Uart_RX & Q_Uart_TX
+
+	/*
+	 * 1) Connect to available wifi nearby
+	 * 2) after successful Connection, Connect to the MQTT server
+	 * 3) check for successful Connection
+	 * 4) connection failure should be handles properly by trying 3 times
+	 * 5) incase of connection failure a message should be displayed
+	 */
+
+
+	u8 rx_buffer[30];					// buffer to hold response
+	Put_TX_Q("UART Running ..");		// send on uart channel
+	Get_RX_Q(rx_buffer,TIMEOUT_200ms);	// receive on rx buffer
+	u8 response = Check_Response("UART Running ..",rx_buffer); //loop back check
+
+	if(TRUE==response){
+		// wifi is running
+		return TRUE;
+	}
+	else{
+		// wifi not responding
+		return FALSE;
+	}
+
+
+
+	/*
+	 * ESP8266 Driver still to be implemented
+	 */
+
+
+
 }

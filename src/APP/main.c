@@ -14,23 +14,23 @@
 #include "semphr.h"
 #include "event_groups.h"
 
+/* include Service layer files */
+#include "../Service_Layer/TypeDefs.h"
+#include "../Service_Layer/System_Diagnostic/diagnostic.h"
+
+/* include Hardware Abstraction Layer Files */
 #include "../HAL/LCD.h"
 #include "../HAL/LDR.h"
 #include "../HAL/Temperature.h"
-#include "../Service_Layer/TypeDefs.h"
 
-/* Micro Controller Abstract Layers Includes  */
-#include "../MCAL/ADC.h"
-#include "../MCAL/usart_driver.h"
-
-/* Hardware Abstract Layer Includes */
+/* Initializer Task include */
 #include "T_Receive.h"
 
 /* Declaration of OS Services */
-/* Declare Mutex semaphore for Data Handling Resources */
-xSemaphoreHandle Mutex_Data ;			// Mutex handle Data Resources
-xSemaphoreHandle BS_RXC_Interrupt;		// BinarySemaphore signal RX interrupt
-xSemaphoreHandle BS_TXC_Interrupt;		// BinarySemaphore signal TX interrupt
+/* Declaration of  semaphores needed for shared Resources */
+xSemaphoreHandle Mutex_Data ;			// Mutex handle for Data Resources
+xSemaphoreHandle BS_RXC_Interrupt;		// BinarySemaphore Event signal RX interrupt
+xSemaphoreHandle BS_TXC_Interrupt;		// BinarySemaphore Event signal TX interrupt
 
 /* Declaration of Global Resources  */
 volatile DataStruct_t TempData ;		// store data related to Temperature
@@ -59,9 +59,6 @@ void sys_init(void){
 	LCD_Init();
 	LCD_Clear_Display();
 
-	// Initializing Wifi Module ESP8266 .
-	Init_Wifi();
-
 	// Initializing Sensors
 	InitLDR();
 	InitTemperature();
@@ -75,7 +72,6 @@ void sys_init(void){
 	LightData.Type = DT_LIGHT ;
 	LightData.CurrentValue = 0;
 	LightData.PreviousValue= 0;
-
 }
 
 int main (void){
@@ -88,8 +84,10 @@ int main (void){
 	/* Create Queues Needed */
 	Q_Uart_RX = xQueueCreate(20,sizeof(char));	// UART RX queue create ,used by ISR
 	Q_Uart_TX = xQueueCreate(20,sizeof(char));	// UART TX queue create ,used by T_Transmit
-	Q_Order   = xQueueCreate(5,sizeof(DataStruct_t)); // Order Queue , up to 5 Orders
-
+	Q_Order   = xQueueCreate(5,sizeof(DataStruct_t)); 		// Order Queue , up to 5 Orders
+#if DIAGNOSTICS == ENABLE
+	Init_DisplayDiagnostic();
+#endif
 	/* Initialize System I/O Resources */
 	//sys_init();
 

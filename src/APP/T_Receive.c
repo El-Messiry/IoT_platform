@@ -15,6 +15,7 @@
 
 
 #include "../Service_Layer/TypeDefs.h"
+#include "../Service_Layer/System_Diagnostic/diagnostic.h"
 #include "FreeRTOS.h"
 #include "task.h"
 #include "queue.h"
@@ -41,6 +42,8 @@ extern void T_Execute(void *pvData);
  */
 void T_Receive(void *pvData){
 
+
+
 	// Create Tasks
 	xTaskCreate(T_Display,NULL,200,NULL,1,NULL);		// Display Task
 	xTaskCreate(T_DataInputs,NULL,200,NULL,2,NULL);		// Data Inputs Task
@@ -48,9 +51,18 @@ void T_Receive(void *pvData){
 	xTaskCreate(T_Transmit,NULL,100,NULL,4,NULL);		// Transmit Task
 	xTaskCreate(T_TX_Handler,NULL,50,NULL,6,NULL);		// TX Task Interrupt Handler
 
+	// Initializing Wifi Module ESP8266 .
+	if(Init_Wifi()){
+		Diagnostics_Display("Wifi connected");
+	}
+	else{
+		Diagnostics_Display("Wifi conn fail");
+	}
+
+
 	while(1){
 
-		// Block on BS_RXC_Interrupt Indicating A Full String Received
+		// Block on Event Signal (BS_RXC_Interrupt) Indicating A Full String Received
 
 		if(xSemaphoreTake(BS_RXC_Interrupt,0)){	// wait for signal
 			while(uxQueueMessagesWaiting(Q_Uart_RX)!=0){

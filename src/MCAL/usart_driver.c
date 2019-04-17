@@ -29,7 +29,7 @@ void usart_init(unsigned  int baudrate)
 }
 
 
-#if (UART_SYS == POLLING) //cad rc
+#if (UART_MODE == POLLING) //cad rc
 unsigned char usart_getc( void )
 {
 	/* Wait for data to be received */
@@ -83,30 +83,5 @@ ISR(USART_RXC_vect){
 ISR(USART_TXC_vect){
 	xSemaphoreGiveFromISR(BS_TXC_Interrupt,FALSE);			// Give (BS_TXC_Interrupt) Signal
 }
-
-
-// The following should be implemented in HAL .... REMOVE IT
-
-//void usart_puts( char* str )
-//{
-//	u8 data;
-//	if( uxQueueMessagesWaiting(Q_Uart_TX) != FALSE){	// if Queue not empty
-//
-//		xSemaphoreGiveFromISR(BS_TXC_Interrupt,FALSE);	// Enable the Send of First Byte
-//		xQueueReceive(Q_Uart_TX,&data,NO_TIMEOUT);	// Receive First Byte
-//		usart_putc(data);					// Send First Byte
-//
-//		while(uxQueueMessagesWaiting(Q_Uart_TX)!= FALSE){
-//			// Process Queue Data while not empty
-//			xQueueReceive(Q_Uart_TX,&data,0);	// Receive Byte
-//			usart_putc(data);					// Send Byte
-//		}
-//
-//	}
-//
-//	return;
-//}
-
-
 
 #endif
