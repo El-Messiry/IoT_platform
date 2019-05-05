@@ -21,7 +21,6 @@
 extern xQueueHandle Q_Uart_TX ;				// 2) queue used between TX ISR
 extern xSemaphoreHandle BS_TXC_Interrupt;	// BinarySemaphore signal TX interrupt
 
-
 void T_TX_Handler(void *pvData){
 	/*
 	 * Description:
@@ -32,12 +31,20 @@ void T_TX_Handler(void *pvData){
 	 * in the Queue ( Q_Uart_TX )
 	 *
 	 */
+
 	u8 data;
-	/* Block on BS_TXC_Interrupt Signal */
-	if(xSemaphoreTake(BS_TXC_Interrupt,0)){
-		xQueueReceive(Q_Uart_TX,&data,0);
-		/* Put data into buffer, sends the data */
-		UDR = data;
+	while(1){
+		/* Block on BS_TXC_Interrupt Signal */
+		if(xSemaphoreTake(BS_TXC_Interrupt,portMAX_DELAY)){
+			xQueueReceive(Q_Uart_TX,&data,0);
+			/* Put data into buffer, sends the data */
+			UDR = data;
+			if('\0'==data){
+				// last byte of string sent , so must receive its TXC signal
+				// so it won't stuck in a loop
+				xSemaphoreTake(BS_TXC_Interrupt,TIMEOUT_50ms);
+			}
+		}
 	}
 }
 

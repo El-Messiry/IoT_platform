@@ -8,6 +8,8 @@ RM := rm -rf
 
 # All of the sources participating in the build are defined here
 -include sources.mk
+-include src/Service_Layer/System_Diagnostic/subdir.mk
+-include src/Service_Layer/MQTT_Client/subdir.mk
 -include src/Service_Layer/FreeRTOS/Src/subdir.mk
 -include src/MCAL/subdir.mk
 -include src/HAL/subdir.mk

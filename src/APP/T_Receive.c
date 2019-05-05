@@ -5,8 +5,9 @@
  *      Author: messi
  */
 
-#include "T_Receive.h"
+#include <avr/interrupt.h>
 
+#include "T_Receive.h"
 #include "T_Display.h"
 #include "T_DataInputs.h"
 #include "T_Execute.h"
@@ -45,11 +46,13 @@ void T_Receive(void *pvData){
 
 
 	// Create Tasks
-	xTaskCreate(T_Display,NULL,200,NULL,1,NULL);		// Display Task
-	xTaskCreate(T_DataInputs,NULL,200,NULL,2,NULL);		// Data Inputs Task
-	xTaskCreate(T_Execute,NULL,100,NULL,3,NULL);		// Transmit Task
-	xTaskCreate(T_Transmit,NULL,100,NULL,4,NULL);		// Transmit Task
+//	xTaskCreate(T_Display,NULL,200,NULL,1,NULL);		// Display Task
+//	xTaskCreate(T_DataInputs,NULL,200,NULL,2,NULL);		// Data Inputs Task
+//	xTaskCreate(T_Execute,NULL,100,NULL,3,NULL);		// Transmit Task
+//	xTaskCreate(T_Transmit,NULL,100,NULL,4,NULL);		// Transmit Task
 	xTaskCreate(T_TX_Handler,NULL,50,NULL,6,NULL);		// TX Task Interrupt Handler
+
+
 
 	// Initializing Wifi Module ESP8266 .
 	if(Init_Wifi()){

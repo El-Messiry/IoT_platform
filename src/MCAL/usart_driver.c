@@ -26,6 +26,9 @@ void usart_init(unsigned  int baudrate)
 
 	//Enable Transmitter and Receiver
 	UCSRB=(1<<RXEN)|(1<<TXEN);
+#if UART_MODE == INTERRUPT
+	UCSRB|= (1<<RXCIE)|(1<<TXCIE);
+#endif
 }
 
 
@@ -81,8 +84,23 @@ ISR(USART_RXC_vect){
 
 // TX Interrupt Handler
 ISR(USART_TXC_vect){
-	xSemaphoreGiveFromISR(BS_TXC_Interrupt,FALSE);			// Give (BS_TXC_Interrupt) Signal
-	// CHANGE PORT
+	static portBASE_TYPE xHigherPriorityTaskWoken;
+	xHigherPriorityTaskWoken = pdFALSE;
+	xSemaphoreGiveFromISR(BS_TXC_Interrupt,&xHigherPriorityTaskWoken);
+	// Give (BS_TXC_Interrupt) Signal
+//	if( xHigherPriorityTaskWoken == pdTRUE )
+//	{
+//	/* Giving the semaphore unblocked a task, and the priority of the
+//	unblocked task is higher than the currently running task - force
+//	a context switch to ensure that the interrupt returns directly to
+//	the unblocked (higher priority) task.
+//	NOTE: The actual macro to use to force a context switch from an
+//	ISR is dependent on the port. This is the correct macro for the
+//	Open Watcom DOS port. Other ports may require different syntax.
+//	Refer to the examples provided for the port being used to determine
+//	the syntax required. */
+//	portSWITCH_CONTEXT();
+//	}
 }
 
 #endif

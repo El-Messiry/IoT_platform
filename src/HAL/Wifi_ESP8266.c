@@ -146,12 +146,15 @@ u8 Init_Wifi(void){
 	 */
 
 
-	u8 rx_buffer[30];					// buffer to hold response
+	u8 rx_buffer[30],response;					// buffer to hold response
+
 	Put_TX_Q("UART Running ..");		// send on uart channel
+	vTaskDelay(1000);
+	Put_TX_Q("Now trying WIFI");		// send on uart channel
 	// wait for Signal ( BS_RXC_Interrupt )
 	if(xSemaphoreTake(BS_RXC_Interrupt,TIMEOUT_200ms)){
 		Get_RX_Q(rx_buffer,TIMEOUT_200ms);	// receive on rx buffer
-		u8 response = Check_Response("UART Running ..",rx_buffer); //loop back check
+		response = Check_Response("UART Running ..",rx_buffer); //loop back check
 	}
 
 	if(TRUE==response){
@@ -167,7 +170,4 @@ u8 Init_Wifi(void){
 	/*
 	 * ESP8266 Driver still to be implemented
 	 */
-
-
-
 }
