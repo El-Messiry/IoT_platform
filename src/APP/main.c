@@ -82,8 +82,8 @@ int main (void){
 	vSemaphoreCreateBinary(BS_TXC_Interrupt,FALSE);		// Create TX Binary Semaphore
 
 	/* Create Queues Needed */
-	Q_Uart_RX = xQueueCreate(20,sizeof(char));	// UART RX queue create ,used by ISR
-	Q_Uart_TX = xQueueCreate(20,sizeof(char));	// UART TX queue create ,used by T_Transmit
+	Q_Uart_RX = xQueueCreate(50,sizeof(char));	// UART RX queue create ,used by ISR
+	Q_Uart_TX = xQueueCreate(50,sizeof(char));	// UART TX queue create ,used by T_Transmit
 	Q_Order   = xQueueCreate(5,sizeof(DataStruct_t)); 		// Order Queue , up to 5 Orders
 #if DIAGNOSTICS == ENABLE
 	Init_DisplayDiagnostic();

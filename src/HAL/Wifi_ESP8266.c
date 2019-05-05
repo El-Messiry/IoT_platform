@@ -104,7 +104,7 @@ void Wifi_Send(DataStruct_t *pStructData){
 
 	char *str="wifi send : 0"; // str should point to the final URL
 
-	TX_Send(str);
+	Put_TX_Q(str);	// Load str to TX buffer
 
 	/*
 	 * ESP8266 Driver still to be implemented
@@ -148,8 +148,11 @@ u8 Init_Wifi(void){
 
 	u8 rx_buffer[30];					// buffer to hold response
 	Put_TX_Q("UART Running ..");		// send on uart channel
-	Get_RX_Q(rx_buffer,TIMEOUT_200ms);	// receive on rx buffer
-	u8 response = Check_Response("UART Running ..",rx_buffer); //loop back check
+	// wait for Signal ( BS_RXC_Interrupt )
+	if(xSemaphoreTake(BS_RXC_Interrupt,TIMEOUT_200ms)){
+		Get_RX_Q(rx_buffer,TIMEOUT_200ms);	// receive on rx buffer
+		u8 response = Check_Response("UART Running ..",rx_buffer); //loop back check
+	}
 
 	if(TRUE==response){
 		// wifi is running

@@ -38,5 +38,4 @@ void Diagnostics_Display(char *str){
 	// Send Message into Queue (Q_Display)
 	xQueueSend(Q_Display,&Message,TIMEOUT_200ms);
 	// Now Display Function will Handle all incoming Messages
-
 }

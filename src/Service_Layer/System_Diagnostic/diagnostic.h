@@ -21,7 +21,10 @@
 typedef struct {
 	char content[16];
 }DisplayStruct_t;
+
+#if DIAGNOSTICS == ENABLE
 extern xQueueHandle Q_Display ;
+#endif
 
 void Init_DisplayDiagnostic(void);
 void Diagnostics_Display(char *str);
