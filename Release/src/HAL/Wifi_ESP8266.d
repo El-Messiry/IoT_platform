@@ -10,7 +10,8 @@ src/HAL/Wifi_ESP8266.o src/HAL/Wifi_ESP8266.o: ../src/HAL/Wifi_ESP8266.c \
   D:\eclipse_workbench\MY_RTOS_PROJ_V4\src\Service_Layer\FreeRTOS\Inc/mpu_wrappers.h \
   D:\eclipse_workbench\MY_RTOS_PROJ_V4\src\Service_Layer\FreeRTOS\Inc/queue.h \
   D:\eclipse_workbench\MY_RTOS_PROJ_V4\src\Service_Layer\FreeRTOS\Inc/semphr.h \
-  D:\eclipse_workbench\MY_RTOS_PROJ_V4\src\Service_Layer\FreeRTOS\Inc/queue.h
+  D:\eclipse_workbench\MY_RTOS_PROJ_V4\src\Service_Layer\FreeRTOS\Inc/queue.h \
+  ../src/HAL/LCD.h
 
 ../src/HAL/Wifi_ESP8266.h:
 
@@ -37,3 +38,5 @@ D:\eclipse_workbench\MY_RTOS_PROJ_V4\src\Service_Layer\FreeRTOS\Inc/queue.h:
 D:\eclipse_workbench\MY_RTOS_PROJ_V4\src\Service_Layer\FreeRTOS\Inc/semphr.h:
 
 D:\eclipse_workbench\MY_RTOS_PROJ_V4\src\Service_Layer\FreeRTOS\Inc/queue.h:
+
+../src/HAL/LCD.h:

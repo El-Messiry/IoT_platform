@@ -73,34 +73,15 @@ void usart_gets( char* str )
 
 // RX Interrupt Handler
 ISR(USART_RXC_vect){
-	u8 byte ;
-	byte = UDR;		// receive byte
-	xQueueSendToBackFromISR(Q_Uart_RX,&byte,NO_TIMEOUT);	// send received byte to Q_Uart_RX
-
-	if(byte == '\0'){	// if Byte received was '\0' indicating End of String
-		xSemaphoreGiveFromISR(BS_RXC_Interrupt,FALSE);	// Give (BS_RXC_Interrupt) Signal
-	}
+	//xSemaphoreGiveFromISR(BS_RXC_Interrupt,FALSE);	// Give (BS_RXC_Interrupt) Signal
+	u8 data ;
+	data = UDR;
+	xQueueSendFromISR(Q_Uart_RX,&data,FALSE);
 }
 
 // TX Interrupt Handler
 ISR(USART_TXC_vect){
-	static portBASE_TYPE xHigherPriorityTaskWoken;
-	xHigherPriorityTaskWoken = pdFALSE;
-	xSemaphoreGiveFromISR(BS_TXC_Interrupt,&xHigherPriorityTaskWoken);
-	// Give (BS_TXC_Interrupt) Signal
-//	if( xHigherPriorityTaskWoken == pdTRUE )
-//	{
-//	/* Giving the semaphore unblocked a task, and the priority of the
-//	unblocked task is higher than the currently running task - force
-//	a context switch to ensure that the interrupt returns directly to
-//	the unblocked (higher priority) task.
-//	NOTE: The actual macro to use to force a context switch from an
-//	ISR is dependent on the port. This is the correct macro for the
-//	Open Watcom DOS port. Other ports may require different syntax.
-//	Refer to the examples provided for the port being used to determine
-//	the syntax required. */
-//	portSWITCH_CONTEXT();
-//	}
+	xSemaphoreGiveFromISR(BS_TXC_Interrupt,FALSE);	// Give (BS_TXC_Interrupt) Signal
 }
 
 #endif

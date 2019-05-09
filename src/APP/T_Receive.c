@@ -7,12 +7,14 @@
 
 #include <avr/interrupt.h>
 
+
+#include "T_TX_Handler.h"
+
 #include "T_Receive.h"
-#include "T_Display.h"
+#include "T_Transmit.h"
 #include "T_DataInputs.h"
 #include "T_Execute.h"
-#include "T_Transmit.h"
-#include "T_TX_Handler.h"
+#include "T_Display.h"
 
 
 #include "../Service_Layer/TypeDefs.h"
@@ -32,12 +34,14 @@
 
 
 extern xQueueHandle Q_Uart_RX ;				// 1) queue used between RX ISR
-extern xSemaphoreHandle BS_RXC_Interrupt;	// BinarySemaphore signal RX interrupt
+extern xSemaphoreHandle BS_MSG_RCVD;
 
 extern void T_Display(void *pvData);
 extern void T_DataInputs(void *pvData);
 extern void T_Transmit(void *pvData);
 extern void T_Execute(void *pvData);
+extern void T_TX_Handler(void *pvData);
+
 /*
  * Task to Handle Data Reception
  */
@@ -53,7 +57,6 @@ void T_Receive(void *pvData){
 	xTaskCreate(T_TX_Handler,NULL,50,NULL,6,NULL);		// TX Task Interrupt Handler
 
 
-
 	// Initializing Wifi Module ESP8266 .
 	if(Init_Wifi()){
 		Diagnostics_Display("Wifi connected");
@@ -63,17 +66,21 @@ void T_Receive(void *pvData){
 	}
 
 
+	char data;
 	while(1){
 
 		// Block on Event Signal (BS_RXC_Interrupt) Indicating A Full String Received
 
-		if(xSemaphoreTake(BS_RXC_Interrupt,0)){	// wait for signal
+		if(xSemaphoreTake(BS_MSG_RCVD,portMAX_DELAY)){	// wait for signal
+			LCD_Clear_Display();
+			LCD_GoTO_Row_Colunmn(0,0);
 			while(uxQueueMessagesWaiting(Q_Uart_RX)!=0){
-				// Process Queue Data while not empty
+				xQueueReceive(Q_Uart_RX,&data,NO_TIMEOUT);
+				LCD_Send_character(data);
 			}
 		}
 
-		vTaskDelay(2);
+		vTaskDelay(2000);
 	}
 
 

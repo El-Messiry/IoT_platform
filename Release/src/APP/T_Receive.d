@@ -1,7 +1,8 @@
 src/APP/T_Receive.o src/APP/T_Receive.o: ../src/APP/T_Receive.c \
-  ../src/APP/T_Receive.h ../src/APP/T_Display.h ../src/APP/T_DataInputs.h \
-  ../src/APP/T_Execute.h ../src/APP/T_Transmit.h \
-  ../src/APP/T_TX_Handler.h ../src/APP/../Service_Layer/TypeDefs.h \
+  ../src/APP/T_TX_Handler.h ../src/APP/T_Receive.h \
+  ../src/APP/T_Transmit.h ../src/APP/T_DataInputs.h \
+  ../src/APP/T_Execute.h ../src/APP/T_Display.h \
+  ../src/APP/../Service_Layer/TypeDefs.h \
   ../src/APP/../Service_Layer/System_Diagnostic/diagnostic.h \
   ../src/APP/../Service_Layer/System_Diagnostic/../TypeDefs.h \
   D:\eclipse_workbench\MY_RTOS_PROJ_V4\src\Service_Layer\FreeRTOS\Inc/FreeRTOS.h \
@@ -24,17 +25,17 @@ src/APP/T_Receive.o src/APP/T_Receive.o: ../src/APP/T_Receive.c \
   ../src/APP/../MCAL/PLATFORM_TYPES.h ../src/APP/../MCAL/usart_driver.h \
   ../src/APP/../MCAL/../Service_Layer/TypeDefs.h
 
+../src/APP/T_TX_Handler.h:
+
 ../src/APP/T_Receive.h:
 
-../src/APP/T_Display.h:
+../src/APP/T_Transmit.h:
 
 ../src/APP/T_DataInputs.h:
 
 ../src/APP/T_Execute.h:
 
-../src/APP/T_Transmit.h:
-
-../src/APP/T_TX_Handler.h:
+../src/APP/T_Display.h:
 
 ../src/APP/../Service_Layer/TypeDefs.h:
 

@@ -29,8 +29,9 @@
 /* Declaration of OS Services */
 /* Declaration of  semaphores needed for shared Resources */
 xSemaphoreHandle Mutex_Data ;			// Mutex handle for Data Resources
-xSemaphoreHandle BS_RXC_Interrupt;		// BinarySemaphore Event signal RX interrupt
+xSemaphoreHandle BS_RXC_Interrupt;		// CountingSemaphore Event signal RX interrupt
 xSemaphoreHandle BS_TXC_Interrupt;		// BinarySemaphore Event signal TX interrupt
+xSemaphoreHandle BS_MSG_RCVD;			// BinarySemaphore Event signal of Received Message
 
 /* Declaration of Global Resources  */
 volatile DataStruct_t TempData ;		// store data related to Temperature
@@ -78,8 +79,10 @@ int main (void){
 
 	/* Create Required Mutexs */
 	Mutex_Data = xSemaphoreCreateMutex();				// Create Data Mutex
-	vSemaphoreCreateBinary(BS_RXC_Interrupt,FALSE);		// Create RX Binary Semaphore
+	//BS_RXC_Interrupt = xSemaphoreCreateCounting(10,0);	// Create RX Counting Semaphore
+	vSemaphoreCreateBinary(BS_RXC_Interrupt,FALSE);		// Create TX Binary Semaphore
 	vSemaphoreCreateBinary(BS_TXC_Interrupt,FALSE);		// Create TX Binary Semaphore
+	vSemaphoreCreateBinary(BS_MSG_RCVD,FALSE);			// Create Message received Semaphore
 
 	/* Create Queues Needed */
 	Q_Uart_RX = xQueueCreate(50,sizeof(char));	// UART RX queue create ,used by ISR

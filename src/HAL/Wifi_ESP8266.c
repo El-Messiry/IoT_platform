@@ -9,18 +9,20 @@
 #include "Wifi_ESP8266.h"
 
 #include "../MCAL/usart_driver.h"
+#include "LCD.h"
 
 extern xQueueHandle Q_Uart_RX ;				// 1) queue used For RX Buffer
 extern xQueueHandle Q_Uart_TX ;				// 2) queue used For TX Buffer
-extern xSemaphoreHandle BS_RXC_Interrupt;	// BinarySemaphore signal RX interrupt
+
 extern xSemaphoreHandle BS_TXC_Interrupt;	// BinarySemaphore signal TX interrupt
+extern xSemaphoreHandle BS_MSG_RCVD;	// BinarySemaphore signal TX interrupt
 
 
 static void Put_TX_Q(char *str){
 	/*
 	 * Description:
-	 * Load String Bytes to Queue (Q_Uart_TX)
-	 * to be sent By UART
+	 * 		Load String Bytes to Queue (Q_Uart_TX)
+	 * 		to be sent By UART
 	 */
 	u8 index=0;
 	while( str[index] ){						// while str[index] != '\0'
@@ -37,30 +39,33 @@ static void Put_TX_Q(char *str){
 	 */
 }
 
-static void Get_RX_Q(char *str,u8 TimeOut){
+static void Get_RX_Q(char *str,u32 TimeOut){
 	/*
 	 * Description:
-	 * Get String Bytes from Queue (Q_Uart_RX)
-	 * to be Decoded into Information, it returns
-	 * if End of String operator reached
+	 * 		Get String Bytes from Queue (Q_Uart_RX)
+	 * 		to be Decoded into Information, it returns
+	 * 		if End of String('\0')or new line ('\n)operator received
 	 * NOTE: EOF '\0' could happen after
-	 * carriage return & new line '\r\n' , but Wifi Module
-	 * can send those between actual messages
-	 * so it should be handled to discard those inter-messages
-	 * carriage return and new line
+	 * 		carriage return & new line '\r\n' , but Wifi Module
+	 * 		can send those between actual messages
+	 * 		so it should be handled to discard those inter-messages
+	 * 		carriage return and new line
 	 */
-	u8 byte,index=0;
-	while(uxQueueMessagesWaiting(Q_Uart_RX)!=0){
-		// Process Queue Data while not empty
-		if(xQueueReceive(Q_Uart_RX,&byte,TIMEOUT_200ms)){	// receive byte
-			str[index]=byte;		// copy byte into str
-			index++;				// increment index
-			if(byte == '\0'){		// if End of String Reached
-				str[index] = '\0' ;	// put '\0' into str
-				return ;			// return
+	u8 index=0, data=0, OnGoing_F=TRUE;
+	while(OnGoing_F){
+		if(xQueueReceive(Q_Uart_RX,&data,TimeOut)){
+			if('\n'==data || '\0'==data){	// terminate if (new line)or(NuLL) is received
+				OnGoing_F=FALSE;			// Exit Loop
+				str[index]='\0'; 			// add null operator at the end of string
+				return;
+			}
+			else{	// store characters into buffer
+				str[index]=data;
+				index++;
 			}
 		}
 	}
+
 }
 
 static u8 Check_Response(char *Expected_str , char *Given_str){
@@ -68,18 +73,12 @@ static u8 Check_Response(char *Expected_str , char *Given_str){
 	 * Description:
 	 * 		Checks if the response is the expected or not
 	 * Return:
-	 * 		(TRUE) if response is a match
+	 * 		(TRUE)  if response is a match
 	 * 		(FALSE) if response is a no match
 	 */
 
-	u8 index_expected=0,index_given=0,Match_F=FALSE;
 
-
-	// implement function body
-
-
-	return Match_F;
-
+	return strcmp(*Expected_str,*Given_str);
 }
 
 
@@ -137,6 +136,7 @@ u8 Init_Wifi(void){
 	// make enable TX&RX function
 	// flush the receive buffer Q_Uart_RX & Q_Uart_TX
 
+
 	/*
 	 * 1) Connect to available wifi nearby
 	 * 2) after successful Connection, Connect to the MQTT server
@@ -146,23 +146,24 @@ u8 Init_Wifi(void){
 	 */
 
 
-	u8 rx_buffer[30],response;					// buffer to hold response
+	LCD_Init();
+	LCD_Clear_Display();
 
-	Put_TX_Q("UART Running ..");		// send on uart channel
-	vTaskDelay(1000);
-	Put_TX_Q("Now trying WIFI");		// send on uart channel
-	// wait for Signal ( BS_RXC_Interrupt )
-	if(xSemaphoreTake(BS_RXC_Interrupt,TIMEOUT_200ms)){
-		Get_RX_Q(rx_buffer,TIMEOUT_200ms);	// receive on rx buffer
-		response = Check_Response("UART Running ..",rx_buffer); //loop back check
-	}
+	char rx_buffer[50]={0},response=0;		// buffer to hold response
 
-	if(TRUE==response){
-		// wifi is running
+	Put_TX_Q("UART Running");			// send TEST on UART channel
+	Get_RX_Q(rx_buffer,portMAX_DELAY);	// Receive TEST MSG mack to insure UART TX/RX is Valid
+	LCD_Send_String(rx_buffer);
+
+	if(strcmp("UART Runnin",rx_buffer)){
+		LCD_GoTO_Row_Colunmn(1,0);
+		LCD_Send_String("FALSE");
 		return TRUE;
 	}
 	else{
 		// wifi not responding
+		LCD_GoTO_Row_Colunmn(1,0);
+		LCD_Send_String("TRUE");
 		return FALSE;
 	}
 
