@@ -50,7 +50,7 @@ void T_Receive(void *pvData){
 
 
 	// Create Tasks
-//	xTaskCreate(T_Display,NULL,200,NULL,1,NULL);		// Display Task
+	xTaskCreate(T_Display,NULL,200,NULL,1,NULL);		// Display Task
 //	xTaskCreate(T_DataInputs,NULL,200,NULL,2,NULL);		// Data Inputs Task
 //	xTaskCreate(T_Execute,NULL,100,NULL,3,NULL);		// Transmit Task
 //	xTaskCreate(T_Transmit,NULL,100,NULL,4,NULL);		// Transmit Task
@@ -71,14 +71,7 @@ void T_Receive(void *pvData){
 
 		// Block on Event Signal (BS_RXC_Interrupt) Indicating A Full String Received
 
-		if(xSemaphoreTake(BS_MSG_RCVD,portMAX_DELAY)){	// wait for signal
-			LCD_Clear_Display();
-			LCD_GoTO_Row_Colunmn(0,0);
-			while(uxQueueMessagesWaiting(Q_Uart_RX)!=0){
-				xQueueReceive(Q_Uart_RX,&data,NO_TIMEOUT);
-				LCD_Send_character(data);
-			}
-		}
+
 
 		vTaskDelay(2000);
 	}

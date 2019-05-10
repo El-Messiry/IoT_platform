@@ -73,10 +73,9 @@ void usart_gets( char* str )
 
 // RX Interrupt Handler
 ISR(USART_RXC_vect){
-	//xSemaphoreGiveFromISR(BS_RXC_Interrupt,FALSE);	// Give (BS_RXC_Interrupt) Signal
 	u8 data ;
-	data = UDR;
-	xQueueSendFromISR(Q_Uart_RX,&data,FALSE);
+	data = UDR;	// Read Byte from UDR
+	xQueueSendFromISR(Q_Uart_RX,&data,FALSE);	// send Byte to Queue
 }
 
 // TX Interrupt Handler

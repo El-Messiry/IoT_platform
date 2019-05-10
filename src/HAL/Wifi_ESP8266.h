@@ -15,6 +15,7 @@
 u8 Init_Wifi(void);
 void Wifi_Send(DataStruct_t *pStructData);
 DataStruct_t Wifi_Receive(void);
-
+u8 Wifi_Connect(void);
+u8 Wifi_Disconnect(void);
 
 #endif /* HAL_WIFI_ESP8266_H_ */
