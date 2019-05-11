@@ -146,25 +146,15 @@ u8 Init_Wifi(void){
 	 */
 
 
-	LCD_Init();
-	LCD_Clear_Display();
-
-	char rx_buffer[50]={0},response=0;		// buffer to hold response
-
+	char rx_buffer[50]={0};				// Buffer to hold the Q_Uart_RX
 	Put_TX_Q("UART Running");			// send TEST on UART channel
 	Get_RX_Q(rx_buffer,portMAX_DELAY);	// Receive TEST MSG mack to insure UART TX/RX is Valid
-	LCD_Send_String(rx_buffer);
 
-	if(strcmp("UART Runnin",rx_buffer)){
-		LCD_GoTO_Row_Colunmn(1,0);
-		LCD_Send_String("FALSE");
-		return TRUE;
+	if(!strcmp("UART Running",rx_buffer)){	// Check Response
+		return TRUE;						// return TRUE if Match
 	}
 	else{
-		// wifi not responding
-		LCD_GoTO_Row_Colunmn(1,0);
-		LCD_Send_String("TRUE");
-		return FALSE;
+		return FALSE;						// Return FALSE if no Match
 	}
 
 

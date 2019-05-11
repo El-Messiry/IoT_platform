@@ -28,7 +28,9 @@ void T_Display(void *pvData){
 
 	while(1){
 
-		Display_Data();
+
+
+		//Display_Data();
 		vTaskDelay(200);
 	}
 }

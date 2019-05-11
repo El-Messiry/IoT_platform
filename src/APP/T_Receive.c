@@ -28,6 +28,7 @@
 #include "../HAL/LCD.h"
 #include "../HAL/LDR.h"
 #include "../HAL/Temperature.h"
+#include "../HAL/Wifi_ESP8266.h"
 
 #include "../MCAL/ADC.h"
 #include "../MCAL/usart_driver.h"
@@ -58,27 +59,24 @@ void T_Receive(void *pvData){
 
 
 	// Initializing Wifi Module ESP8266 .
+
+	LCD_Init();
+	LCD_Clear_Display();
+
 	if(Init_Wifi()){
+		LCD_Send_String("TRUE");
 		Diagnostics_Display("Wifi connected");
 	}
 	else{
+		LCD_Send_String("FALSE");
 		Diagnostics_Display("Wifi conn fail");
 	}
 
 
-	char data;
+
 	while(1){
 
-		// Block on Event Signal (BS_RXC_Interrupt) Indicating A Full String Received
 
-		if(xSemaphoreTake(BS_MSG_RCVD,portMAX_DELAY)){	// wait for signal
-			LCD_Clear_Display();
-			LCD_GoTO_Row_Colunmn(0,0);
-			while(uxQueueMessagesWaiting(Q_Uart_RX)!=0){
-				xQueueReceive(Q_Uart_RX,&data,NO_TIMEOUT);
-				LCD_Send_character(data);
-			}
-		}
 
 		vTaskDelay(2000);
 	}

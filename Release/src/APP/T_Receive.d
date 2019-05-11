@@ -21,8 +21,9 @@ src/APP/T_Receive.o src/APP/T_Receive.o: ../src/APP/T_Receive.c \
   D:\eclipse_workbench\MY_RTOS_PROJ_V4\src\Service_Layer\FreeRTOS\Inc/task.h \
   ../src/APP/../HAL/LCD.h ../src/APP/../HAL/LDR.h \
   ../src/APP/../HAL/../Service_Layer/TypeDefs.h \
-  ../src/APP/../HAL/Temperature.h ../src/APP/../MCAL/ADC.h \
-  ../src/APP/../MCAL/PLATFORM_TYPES.h ../src/APP/../MCAL/usart_driver.h \
+  ../src/APP/../HAL/Temperature.h ../src/APP/../HAL/Wifi_ESP8266.h \
+  ../src/APP/../MCAL/ADC.h ../src/APP/../MCAL/PLATFORM_TYPES.h \
+  ../src/APP/../MCAL/usart_driver.h \
   ../src/APP/../MCAL/../Service_Layer/TypeDefs.h
 
 ../src/APP/T_TX_Handler.h:
@@ -78,6 +79,8 @@ D:\eclipse_workbench\MY_RTOS_PROJ_V4\src\Service_Layer\FreeRTOS\Inc/task.h:
 ../src/APP/../HAL/../Service_Layer/TypeDefs.h:
 
 ../src/APP/../HAL/Temperature.h:
+
+../src/APP/../HAL/Wifi_ESP8266.h:
 
 ../src/APP/../MCAL/ADC.h:
 
