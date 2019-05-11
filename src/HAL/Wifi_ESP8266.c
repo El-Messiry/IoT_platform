@@ -136,6 +136,7 @@ u8 Init_Wifi(void){
 	// make enable TX&RX function
 	// flush the receive buffer Q_Uart_RX & Q_Uart_TX
 
+
 	/*
 	 * 1) Connect to available wifi nearby
 	 * 2) after successful Connection, Connect to the MQTT server
@@ -144,21 +145,26 @@ u8 Init_Wifi(void){
 	 * 5) incase of connection failure a message should be displayed
 	 */
 
+
 	LCD_Init();
 	LCD_Clear_Display();
 
-	char rx_buffer[50]={0},response=0;	// buffer to hold response
+	char rx_buffer[50]={0},response=0;		// buffer to hold response
 
 	Put_TX_Q("UART Running");			// send TEST on UART channel
 	Get_RX_Q(rx_buffer,portMAX_DELAY);	// Receive TEST MSG mack to insure UART TX/RX is Valid
+	LCD_Send_String(rx_buffer);
 
-	if(strcmp("UART Running",rx_buffer)){
-		// Wifi not responding to MCu
-		return FALSE;
+	if(strcmp("UART Runnin",rx_buffer)){
+		LCD_GoTO_Row_Colunmn(1,0);
+		LCD_Send_String("FALSE");
+		return TRUE;
 	}
 	else{
-		// Wifi is successfully connected to MCu
-		return TRUE;
+		// wifi not responding
+		LCD_GoTO_Row_Colunmn(1,0);
+		LCD_Send_String("TRUE");
+		return FALSE;
 	}
 
 

@@ -15,8 +15,6 @@
 
 #define ENABLE 		1
 #define DISABLE 	0
-
-// ENABLE - DISABLE Diagnostics from here
 #define DIAGNOSTICS ENABLE
 
 
