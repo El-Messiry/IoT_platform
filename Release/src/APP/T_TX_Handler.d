@@ -13,7 +13,8 @@ src/APP/T_TX_Handler.o src/APP/T_TX_Handler.o: ../src/APP/T_TX_Handler.c \
   D:\eclipse_workbench\MY_RTOS_PROJ_V4\src\Service_Layer\FreeRTOS\Inc/queue.h \
   D:\eclipse_workbench\MY_RTOS_PROJ_V4\src\Service_Layer\FreeRTOS\Inc/event_groups.h \
   D:\eclipse_workbench\MY_RTOS_PROJ_V4\src\Service_Layer\FreeRTOS\Inc/timers.h \
-  D:\eclipse_workbench\MY_RTOS_PROJ_V4\src\Service_Layer\FreeRTOS\Inc/task.h
+  D:\eclipse_workbench\MY_RTOS_PROJ_V4\src\Service_Layer\FreeRTOS\Inc/task.h \
+  ../src/APP/../HAL/LCD.h
 
 ../src/APP/T_TX_Handler.h:
 
@@ -46,3 +47,5 @@ D:\eclipse_workbench\MY_RTOS_PROJ_V4\src\Service_Layer\FreeRTOS\Inc/event_groups
 D:\eclipse_workbench\MY_RTOS_PROJ_V4\src\Service_Layer\FreeRTOS\Inc/timers.h:
 
 D:\eclipse_workbench\MY_RTOS_PROJ_V4\src\Service_Layer\FreeRTOS\Inc/task.h:
+
+../src/APP/../HAL/LCD.h:

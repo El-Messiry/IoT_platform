@@ -17,6 +17,7 @@
 #include "semphr.h"
 #include "event_groups.h"
 
+#include "../HAL/LCD.h"
 
 extern xQueueHandle Q_Uart_TX ;				// 2) queue used between TX ISR
 extern xSemaphoreHandle BS_TXC_Interrupt;	// BinarySemaphore signal TX interrupt
@@ -32,6 +33,8 @@ void T_TX_Handler(void *pvData){
 	 *
 	 */
 
+	LCD_Init();
+	LCD_Clear_Display();
 	u8 data;
 	while(1){
 		/* Block on BS_TXC_Interrupt Signal */

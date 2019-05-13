@@ -23,8 +23,13 @@
 #include "../HAL/LDR.h"
 #include "../HAL/Temperature.h"
 
-/* Initializer Task include */
+/* Task Header include */
+#include "T_TX_Handler.h"
 #include "T_Receive.h"
+#include "T_Transmit.h"
+#include "T_DataInputs.h"
+#include "T_Execute.h"
+#include "T_Display.h"
 
 /* Declaration of OS Services */
 /* Declaration of  semaphores needed for shared Resources */
@@ -95,8 +100,12 @@ int main (void){
 	//sys_init();
 
 	/* Create Entry Initialization Task  */
-	xTaskCreate(T_Receive,NULL,400,NULL,5,NULL);		// Create Task Receive
-
+	xTaskCreate(T_Receive,NULL,200,NULL,2,NULL);		// Create Task Receive
+	xTaskCreate(T_Display,NULL,100,NULL,1,NULL);		// Display Task
+//	xTaskCreate(T_DataInputs,NULL,200,NULL,2,NULL);		// Data Inputs Task
+//	xTaskCreate(T_Execute,NULL,100,NULL,3,NULL);		// Transmit Task
+//	xTaskCreate(T_Transmit,NULL,100,NULL,4,NULL);		// Transmit Task
+	xTaskCreate(T_TX_Handler,NULL,50,NULL,3,NULL);		// TX Task Interrupt Handler
 	/* Start OS/Scheduler */
 	vTaskStartScheduler();
 

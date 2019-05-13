@@ -10,8 +10,6 @@
 
 
 extern xQueueHandle Q_Uart_RX ;				// 1) queue used between RX ISR
-extern xQueueHandle Q_Uart_TX ;				// 2) queue used between TX ISR
-extern xSemaphoreHandle BS_RXC_Interrupt;	// BinarySemaphore signal RX interrupt
 extern xSemaphoreHandle BS_TXC_Interrupt;	// BinarySemaphore signal TX interrupt
 
 void usart_init(unsigned  int baudrate)
@@ -69,7 +67,8 @@ void usart_gets( char* str )
 	}
 
 }
-#else if UART_MODE == INTERRUPT
+
+#elif UART_MODE == INTERRUPT
 
 // RX Interrupt Handler
 ISR(USART_RXC_vect){
