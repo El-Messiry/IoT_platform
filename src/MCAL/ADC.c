@@ -16,7 +16,7 @@ void ADC_Init(void)
 
 int ADC_Read(uint8 Channel)
  {
-	ADMUX &=0xE0; // clear least 5 bits (channel)
+	ADMUX &=0xE0; // clear last 5 bits (channel)
 	Channel &=0x07; //reassignation for the input argument
 	ADMUX |=Channel;
 

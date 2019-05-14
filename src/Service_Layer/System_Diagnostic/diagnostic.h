@@ -17,16 +17,16 @@
 #define DISABLE 	0
 #define DIAGNOSTICS ENABLE
 
-
+#if DIAGNOSTICS == ENABLE
 typedef struct {
 	char content[16];
 }DisplayStruct_t;
 
-#if DIAGNOSTICS == ENABLE
-extern xQueueHandle Q_Display ;
-#endif
+
+extern xQueueHandle Q_Diagnostics ;
+
 
 void Init_DisplayDiagnostic(void);
-void Diagnostics_Display(char *str);
-
+void Diagnostics_Display(char str_enum);
+#endif
 #endif /* SERVICE_LAYER_SYSTEM_DIAGNOSTIC_DIAGNOSTIC_H_ */

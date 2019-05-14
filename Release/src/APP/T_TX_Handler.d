@@ -1,5 +1,7 @@
 src/APP/T_TX_Handler.o src/APP/T_TX_Handler.o: ../src/APP/T_TX_Handler.c \
   ../src/APP/T_TX_Handler.h ../src/APP/../Service_Layer/TypeDefs.h \
+  ../src/APP/../Service_Layer/My_Strings/MemoryStrings.h \
+  ../src/APP/../Service_Layer/My_Strings/../TypeDefs.h \
   D:\eclipse_workbench\MY_RTOS_PROJ_V4\src\Service_Layer\FreeRTOS\Inc/FreeRTOS.h \
   D:\eclipse_workbench\MY_RTOS_PROJ_V4\src\Service_Layer\FreeRTOS/FreeRTOSConfig.h \
   D:\eclipse_workbench\MY_RTOS_PROJ_V4\src\Service_Layer\FreeRTOS\Inc/projdefs.h \
@@ -19,6 +21,10 @@ src/APP/T_TX_Handler.o src/APP/T_TX_Handler.o: ../src/APP/T_TX_Handler.c \
 ../src/APP/T_TX_Handler.h:
 
 ../src/APP/../Service_Layer/TypeDefs.h:
+
+../src/APP/../Service_Layer/My_Strings/MemoryStrings.h:
+
+../src/APP/../Service_Layer/My_Strings/../TypeDefs.h:
 
 D:\eclipse_workbench\MY_RTOS_PROJ_V4\src\Service_Layer\FreeRTOS\Inc/FreeRTOS.h:
 

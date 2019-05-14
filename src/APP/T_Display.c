@@ -7,9 +7,11 @@
 
 #include "T_Display.h"
 
+#include <avr/pgmspace.h>
 
 #include "../Service_Layer/TypeDefs.h"
 #include "../Service_Layer/System_Diagnostic/diagnostic.h"
+#include "../Service_Layer/My_Strings/MemoryStrings.h"
 #include "FreeRTOS.h"
 #include "task.h"
 #include "queue.h"
@@ -19,24 +21,28 @@
 #include "../HAL/LCD.h"
 
 extern DataStruct_t TempData,LightData ;
-extern xQueueHandle Q_Display;
+extern xQueueHandle Q_Diagnostics;
+
+
 
 void T_Display(void *pvData){
 
+	BufferStruct_st Diagnostic_Msg;
 
-	DisplayStruct_t Diagnostic_Msg;
 	while(1){
 
-		if(xQueueReceive(Q_Display,&Diagnostic_Msg.content,portMAX_DELAY)){
+		if(xQueueReceive(Q_Diagnostics,
+						&Diagnostic_Msg.content,
+						NO_TIMEOUT)){
+
 			LCD_Clear_Display();
 			LCD_Send_String_Row_Column(0,0,"Diagnostic:");
 			LCD_Send_String_Row_Column(1,0,Diagnostic_Msg.content);
 			vTaskDelay(3000);
 			LCD_Clear_Display();
-		}
+		}//end if
 
-
-		vTaskDelay(200);
+		vTaskDelay(1000); // sleep 1 sec
 	}
 }
 

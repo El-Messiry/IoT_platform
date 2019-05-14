@@ -11,6 +11,7 @@
 
 
 #include "../Service_Layer/TypeDefs.h"
+#include "../Service_Layer/My_Strings/MemoryStrings.h"
 #include "FreeRTOS.h"
 #include "task.h"
 #include "queue.h"
@@ -33,8 +34,10 @@ void T_TX_Handler(void *pvData){
 	 *
 	 */
 
+
 	LCD_Init();
 	LCD_Clear_Display();
+
 	u8 data;
 	while(1){
 		/* Block on BS_TXC_Interrupt Signal */

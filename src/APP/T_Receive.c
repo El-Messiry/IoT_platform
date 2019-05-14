@@ -19,6 +19,7 @@
 
 #include "../Service_Layer/TypeDefs.h"
 #include "../Service_Layer/System_Diagnostic/diagnostic.h"
+#include "../Service_Layer/My_Strings/MemoryStrings.h"
 #include "FreeRTOS.h"
 #include "task.h"
 #include "queue.h"
@@ -38,7 +39,6 @@ extern xQueueHandle Q_Uart_RX ;				// 1) queue used between RX ISR
 extern xSemaphoreHandle BS_MSG_RCVD;
 
 
-
 /*
  * Task to Handle Data Reception
  */
@@ -54,10 +54,10 @@ void T_Receive(void *pvData){
 
 
 	if(Init_Wifi()){
-		Diagnostics_Display("Wifi connected");
+		Diagnostics_Display(STR_UartRunning);
 	}
 	else{
-		Diagnostics_Display("Wifi conn fail");
+		Diagnostics_Display(STR_UartConnFail);
 	}
 
 

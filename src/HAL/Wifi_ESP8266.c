@@ -7,7 +7,7 @@
 
 
 #include "Wifi_ESP8266.h"
-
+#include "../Service_Layer/My_Strings/MemoryStrings.h"
 #include "../MCAL/usart_driver.h"
 #include "LCD.h"
 
@@ -78,7 +78,7 @@ static u8 Check_Response(char *Expected_str , char *Given_str){
 	 */
 
 
-	return strcmp(*Expected_str,*Given_str);
+	return FALSE;
 }
 
 
@@ -146,11 +146,15 @@ u8 Init_Wifi(void){
 	 */
 
 
-	char rx_buffer[50]={0};				// Buffer to hold the Q_Uart_RX
-	Put_TX_Q("UART Running");			// send TEST on UART channel
-	Get_RX_Q(rx_buffer,portMAX_DELAY);	// Receive TEST MSG mack to insure UART TX/RX is Valid
+	BufferStruct_st buffer = Get_ROM_String(STR_UartTest,TABLE_DIAGNOSTIC);
 
-	if(!strcmp("UART Running",rx_buffer)){	// Check Response
+	Put_TX_Q(buffer.content);			// send TEST on UART channel
+	// clear buffer
+	CLR_BUFFER(buffer.content,BUFFER_CONTENT_LENGTH) ;
+	Get_RX_Q(buffer.content,portMAX_DELAY);	// Receive TEST MSG mack to insure UART TX/RX is Valid
+
+		// use strcmp_p if comparing ram/rom strings
+	if(!strcmp("UART Running",buffer.content)){	// Check Response
 		return TRUE;						// return TRUE if Match
 	}
 	else{

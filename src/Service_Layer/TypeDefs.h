@@ -16,7 +16,8 @@ typedef signed char   s8 ;
 typedef signed int    s16;
 typedef signed long   s32;
 
-
+#include <avr/pgmspace.h>
+#include <string.h>
 
 #define SETBIT(portname , pinnumber)     (portname |= (1 << pinnumber))		// Set Bit ( high )
 #define CLEARBIT(portname , pinnumber)   (portname &= ~(1 << pinnumber))	// clear it( low  )
@@ -59,7 +60,13 @@ typedef struct {
 	u16 PreviousValue;
 }DataStruct_t;
 
+#define BUFFER_CONTENT_LENGTH 16
+typedef struct {
+	char content[BUFFER_CONTENT_LENGTH];
+}BufferStruct_st;
 
+
+#define CLR_BUFFER(buffer,buffer_length) memset((buffer), 0, (buffer_length) * (sizeof buffer[0]) )
 
 
 #endif /* TYPEDEFS_H_ */

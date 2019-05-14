@@ -29,7 +29,7 @@ extern volatile u8 Pending_Data_F ;
  */
 void T_Transmit(void *pvData){
 
-	u8 data;
+
 
 	while(1){
 
